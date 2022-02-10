@@ -1,0 +1,27 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+/* purgecss start ignore */
+@import "reset";
+@import "buttons";
+@import "form";
+@import "nprogress";
+
+/* vue2-datepicker */
+@import "vue2-datepicker/index.css";
+
+@layer base {
+    .page-header {
+        @apply mb-4 text-3xl font-bold;
+    }
+    .section-header {
+        @apply mb-2 text-2xl font-bold;
+    }
+}
+@layer components {
+    .mx-datepicker {
+        width: 100% !important;
+    }
+}
+/* purgecss end ignore */
