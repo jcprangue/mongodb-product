@@ -51,7 +51,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
 
     //extension function in resource
-    Route::get('/dashboard/status/category', [DashboardController::class, 'getCategoryChart'])->name('dashboard.stat.category');
+    Route::get('/records/list/export', [ProcurementRecordController::class, 'export'])->name('records.export');
+    Route::post('/dashboard/status/category', [DashboardController::class, 'getCategoryChart'])->name('dashboard.stat.category');
     Route::get('/brgy/{id}/create', [BarangayController::class, 'create'])->name('brgy.create');
     Route::post('/document-type/field/listOrder', [DocumentFieldController::class, 'updateOrder'])->name('field.updateOrder');
     Route::post('/records-details/listUpdate', [ProcurementDetailsController::class, 'listDetails'])->name('records-details.listUpdate');

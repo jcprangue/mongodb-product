@@ -36,6 +36,13 @@ class ProcurementRecord extends Model
         return $this->hasOne('App\Models\Category', "id", "category_id");
     }
 
+    /**
+     * @return mixed
+     */
+    public function details()
+    {
+        return $this->hasMany('App\Models\ProcurementDetails', "procurement_record_id", "id");
+    }
 
     /**
      * @return mixed
@@ -51,6 +58,14 @@ class ProcurementRecord extends Model
     public function barangay()
     {
         return $this->hasOne('App\Models\Barangay', "id", "barangay_id");
+    }
+
+    /**
+     * @return mixed
+     */
+    public function office()
+    {
+        return $this->hasOne('App\Models\Office', "id", "office_id");
     }
 
 

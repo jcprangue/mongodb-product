@@ -8,6 +8,8 @@ use App\Models\Office;
 use App\Models\ProcurementRecord;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Excel;
+use App\Exports\ProcurementRecordExport;
 
 class ProcurementRecordController extends Controller
 {
@@ -135,5 +137,11 @@ class ProcurementRecordController extends Controller
     {
         ProcurementRecord::find($id)->delete();
         return redirect(route('records.index'))->with('success', 'Record Successfully Deleted');
+    }
+
+    public function export(Request $request)
+    {
+        $category = Category::find($request->category);
+        return Excel::download(new ProcurementRecordExport($category), 'P-' . date('Ymdhis') . '.xlsx');
     }
 }

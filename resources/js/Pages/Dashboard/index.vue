@@ -86,12 +86,16 @@ export default {
       type: Array,
       default: () => {},
     },
+    date: {
+      type: Object,
+      default: () => {},
+    },
   },
   data() {
     return {
       filterForm: {
-        month_from: "",
-        month_to: "",
+        month_from: this.date.from,
+        month_to: this.date.to,
         category_id: "",
       },
       chartForm: {
@@ -113,9 +117,8 @@ export default {
     },
     selectCategory(id) {
       this.filterForm.category_id = id;
-      console.log(this.filterForm);
       axios
-        .post(this.route("dashboard.index"), this.filterForm, {
+        .post(`/dashboard/status/category`, this.filterForm, {
           headers: {
             "X-CSRF-TOKEN": document.head.querySelector(
               'meta[name="csrf-token"]'
@@ -130,16 +133,15 @@ export default {
           if (!this.chartGradient) {
             this.applyGradient();
           }
-          // console.log("response.data", response.data);
-
+          console.log(response.data);
           (this.chartData = {
             // labels: response.data.labels,
-            labels: ["2020-12", "2021-01", "2021-02", "2021-03", "2021-04"],
+            labels: response.data.months,
             datasets: [
               {
                 label: "Number of Procurement",
                 // data: response.data.data,
-                data: [55, 82, 155, 407, 139],
+                data: response.data.count,
                 backgroundColor: this.chartGradient,
                 borderColor: "#05CBE1",
                 pointBackgroundColor: "white",

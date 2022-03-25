@@ -20,13 +20,17 @@
         v-model="filterForm.search"
       />
 
-      <inertia-link class="btn-indigo mr-3" :href="route('records.create')">
+      <inertia-link
+        class="btn-indigo mr-3"
+        :href="route('records.create')"
+        target="_Blank"
+      >
         <span>Create Procurement</span>
       </inertia-link>
 
-      <inertia-link class="btn-green" href="">
+      <a class="btn-green" :href="route('records.export', this.filterForm)">
         <span>Export</span>
-      </inertia-link>
+      </a>
       <div></div>
     </div>
 

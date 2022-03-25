@@ -28,4 +28,12 @@ class CategoryDocument extends Model
     {
         return $this->hasOne('App\Models\Documents', "id", "document_id");
     }
+
+    /**
+     * @return mixed
+     */
+    public function fields()
+    {
+        return $this->hasMany('App\Models\DocumentField', "document_id", "document_id");
+    }
 }

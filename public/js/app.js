@@ -5859,6 +5859,10 @@ __webpack_require__.r(__webpack_exports__);
     categories: {
       type: Array,
       "default": function _default() {}
+    },
+    date: {
+      type: Object,
+      "default": function _default() {}
     }
   },
   components: {
@@ -6001,13 +6005,17 @@ __webpack_require__.r(__webpack_exports__);
     categories: {
       type: Array,
       "default": function _default() {}
+    },
+    date: {
+      type: Object,
+      "default": function _default() {}
     }
   },
   data: function data() {
     return {
       filterForm: {
-        month_from: "",
-        month_to: "",
+        month_from: this.date.from,
+        month_to: this.date.to,
         category_id: ""
       },
       chartForm: {
@@ -6031,8 +6039,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       this.filterForm.category_id = id;
-      console.log(this.filterForm);
-      axios__WEBPACK_IMPORTED_MODULE_2___default().post(this.route("dashboard.index"), this.filterForm, {
+      axios__WEBPACK_IMPORTED_MODULE_2___default().post("/dashboard/status/category", this.filterForm, {
         headers: {
           "X-CSRF-TOKEN": document.head.querySelector('meta[name="csrf-token"]').content,
           "X-Requested-With": "XMLHttpRequest"
@@ -6044,16 +6051,16 @@ __webpack_require__.r(__webpack_exports__);
 
         if (!_this.chartGradient) {
           _this.applyGradient();
-        } // console.log("response.data", response.data);
+        }
 
-
+        console.log(response.data);
         _this.chartData = {
           // labels: response.data.labels,
-          labels: ["2020-12", "2021-01", "2021-02", "2021-03", "2021-04"],
+          labels: response.data.months,
           datasets: [{
             label: "Number of Procurement",
             // data: response.data.data,
-            data: [55, 82, 155, 407, 139],
+            data: response.data.count,
             backgroundColor: _this.chartGradient,
             borderColor: "#05CBE1",
             pointBackgroundColor: "white"
@@ -9288,6 +9295,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lodash_throttle__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! lodash/throttle */ "./node_modules/lodash/throttle.js");
 /* harmony import */ var lodash_throttle__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(lodash_throttle__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var _Shared_Pagination__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @/Shared/Pagination */ "./resources/js/Shared/Pagination.vue");
+//
+//
+//
+//
 //
 //
 //
@@ -95241,7 +95252,11 @@ var render = function () {
           _c(
             "div",
             { staticClass: "overflow-hidden" },
-            [_c("dashboard", { attrs: { categories: _vm.categories } })],
+            [
+              _c("dashboard", {
+                attrs: { categories: _vm.categories, date: _vm.date },
+              }),
+            ],
             1
           ),
         ]),
@@ -99852,14 +99867,17 @@ var render = function () {
             "inertia-link",
             {
               staticClass: "btn-indigo mr-3",
-              attrs: { href: _vm.route("records.create") },
+              attrs: { href: _vm.route("records.create"), target: "_Blank" },
             },
             [_c("span", [_vm._v("Create Procurement")])]
           ),
           _vm._v(" "),
           _c(
-            "inertia-link",
-            { staticClass: "btn-green", attrs: { href: "" } },
+            "a",
+            {
+              staticClass: "btn-green",
+              attrs: { href: _vm.route("records.export", this.filterForm) },
+            },
             [_c("span", [_vm._v("Export")])]
           ),
           _vm._v(" "),

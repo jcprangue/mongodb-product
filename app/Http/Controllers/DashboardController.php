@@ -3,8 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\ProcurementRecord;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
+use DateTime;
+use DatePeriod;
+use DateInterval;
 
 class DashboardController extends Controller
 {
@@ -13,12 +19,22 @@ class DashboardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $year = date('Y');
+        $from = date('Y-m-d', strtotime($year . '-01'));
+        $to =  date('Y-m-d', strtotime($year . '-12'));
+        if (isset($request["data"])) {
+            $from = date('Y-m-d', strtotime($request["data"]["month_from"]));
+            $to = date('Y-m-d', strtotime($request["data"]["month_to"]));
+        }
         $data = [
-            "categories" => Category::with('procurementRecords')->get()
+            "categories" => Category::with('procurementRecords')->get(),
+            "date" => [
+                "from" => $from,
+                "to" => $to
+            ]
         ];
-
         return Inertia::render('Dashboard', $data);
     }
 
@@ -89,7 +105,21 @@ class DashboardController extends Controller
     }
 
 
-    public function getCategoryChart()
+    public function getCategoryChart(Request $request)
     {
+        $period = CarbonPeriod::create($request->month_from, '1 month', $request->month_to);
+        $months = [];
+        foreach ($period as $dt) {
+            $date_format = $dt->format("Y-m");
+            $records = ProcurementRecord::where('bid_opening_date', 'LIKE', $date_format . '%')->get();
+
+            $months[] = $date_format;
+            $dataSets[] = count($records);
+        }
+
+        return [
+            "months" => $months,
+            "count" => $dataSets,
+        ];
     }
 }

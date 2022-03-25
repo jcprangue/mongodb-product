@@ -9,7 +9,7 @@
     <div class="py-12">
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="overflow-hidden">
-          <dashboard :categories="categories" />
+          <dashboard :categories="categories" :date="date" />
         </div>
       </div>
     </div>
@@ -24,6 +24,10 @@ export default {
   props: {
     categories: {
       type: Array,
+      default: () => {},
+    },
+    date: {
+      type: Object,
       default: () => {},
     },
   },

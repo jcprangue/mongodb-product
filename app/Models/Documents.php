@@ -14,4 +14,11 @@ class Documents extends Model
      * @var array
      */
     protected $fillable = ['name', 'abbr'];
+    /**
+     * @return mixed
+     */
+    public function documentFields()
+    {
+        return $this->hasMany('App\Models\DocumentField', "id", "document_id");
+    }
 }
