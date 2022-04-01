@@ -28,8 +28,15 @@
         <span>Create Procurement</span>
       </inertia-link>
 
-      <a class="btn-green" :href="route('records.export', this.filterForm)">
+      <a
+        class="btn-green mr-3"
+        :href="route('records.export', this.filterForm)"
+      >
         <span>Export</span>
+      </a>
+
+      <a class="btn-green" :href="route('records.pdf', this.filterForm)">
+        <span>Print</span>
       </a>
       <div></div>
     </div>
@@ -42,7 +49,7 @@
             class="pr-6"
             label="Category"
           >
-            <option :value="null">All</option>
+            <!-- <option :value="null">All</option> -->
             <option
               v-for="(category, i) of categories"
               :key="i"
@@ -145,7 +152,13 @@
           {{ row.bid_opening_date }}
         </td>
         <td class="p-3">
-          {{ row.ib_number }}
+          <inertia-link
+            class="focus:text-indigo-500"
+            :href="route('records-link.edit', row.id)"
+            tabindex="-1"
+          >
+            <span class="text-blue-600 font-bold">{{ row.ib_number }}</span>
+          </inertia-link>
         </td>
         <td class="p-3">
           {{ row.project_name }}

@@ -49,8 +49,16 @@
             <textarea-input
               v-model="form.remarks"
               :error="errors.remarks"
-              class="w-full pb-8 pr-6"
+              class="w-full pr-6"
               label="Remarks"
+            />
+          </div>
+          <div class="flex flex-wrap p-8 -mb-8 -mr-6">
+            <text-input
+              v-model="form.link"
+              :error="errors.link"
+              class="w-full pr-6"
+              label="URL Links"
             />
           </div>
           <div
@@ -108,6 +116,7 @@ export default {
         field_id: "",
         data: "",
         remarks: "",
+        link: "",
       },
 
       barangays: [],

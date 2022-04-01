@@ -24,7 +24,9 @@ class ProcurementRecord extends Model
         'barangay_id',
         'amount',
         'status',
-        'remarks'
+        'remarks',
+        'created_user_by_id',
+        'updated_user_by_id',
     ];
 
 
@@ -71,12 +73,17 @@ class ProcurementRecord extends Model
 
     public function scopeFilter($query, $request)
     {
+
+        $user = auth()->user();
         $query->when($request["search"] ?? null, function ($query) use ($request) {
             $query->where('ib_number', 'like', "%$request->search%")
                 ->orWhere('project_name', 'like', "%$request->search%")
                 ->orWhere('contractor', 'like', "%$request->search%");
         })->when($request['category'] ?? null, function ($query) use ($request) {
             $query->where('category_id', $request->category);
+        })->when($request['category'] == null, function ($query) use ($user) {
+            $tags = json_decode($user->tag);
+            $query->whereIN('category_id', $tags);
         })->when($request['lgu_id'] ?? null, function ($query) use ($request) {
             $query->where('lgu_id', $request->lgu_id);
         })->when($request['barangay_id'] ?? null, function ($query) use ($request) {

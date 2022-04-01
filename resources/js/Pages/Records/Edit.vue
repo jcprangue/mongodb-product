@@ -63,16 +63,32 @@
             <select-input
               v-model="form.category_id"
               :error="errors.category_id"
-              class="w-full pb-8 pr-6"
+              class="w-1/2 pb-8 pr-6"
               label="Category"
             >
-              <option :value="null">All</option>
+              <option :value="null">--Select Category--</option>
               <option
                 v-for="(catagory, i) of categories"
                 :key="i"
                 :value="catagory.id"
               >
                 {{ catagory.name }}
+              </option>
+            </select-input>
+
+            <select-input
+              v-model="form.office_id"
+              :error="errors.office_id"
+              class="w-1/2 pb-8 pr-6"
+              label="Office"
+            >
+              <option :value="null">--Select Office--</option>
+              <option
+                v-for="(office, i) of offices"
+                :key="i"
+                :value="office.id"
+              >
+                {{ office.abbr }}
               </option>
             </select-input>
           </div>
@@ -178,6 +194,7 @@ export default {
     categories: { type: [Object, Array], default: () => {} },
     LGUs: { type: [Object, Array], default: () => {} },
     record: { type: [Object, Array], default: () => {} },
+    offices: { type: [Object, Array], default: () => {} },
   },
   data() {
     return {
@@ -188,6 +205,7 @@ export default {
         project_name: this.record.project_name,
         contractor: this.record.contractor,
         category_id: this.record.category_id,
+        office_id: this.record.office_id,
         amount: this.record.amount,
         lgu_id: this.record.lgu_id,
         barangay_id: this.record.barangay_id,

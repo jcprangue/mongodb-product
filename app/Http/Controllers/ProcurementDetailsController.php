@@ -6,8 +6,11 @@ use App\Models\CategoryDocument;
 use App\Models\DocumentField;
 use App\Models\ProcurementDetails;
 use App\Models\ProcurementRecord;
+use App\Models\ProcurementRecordLink;
+use App\Models\ProcurementSystemLog;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use DB;
 
 class ProcurementDetailsController extends Controller
 {
@@ -74,16 +77,43 @@ class ProcurementDetailsController extends Controller
      */
     public function store(Request $request)
     {
-        ProcurementDetails::create($request->validate([
-            'procurement_record_id' => 'required',
-            'category_id' => 'required',
-            'document_id' => 'required',
-            'field_id' => 'required',
-            'data' => 'required',
-            'remarks' => 'nullable',
+        DB::beginTransaction();
+        try {
+            $record = ProcurementDetails::create($request->validate([
+                'procurement_record_id' => 'required',
+                'category_id' => 'required',
+                'document_id' => 'required',
+                'field_id' => 'required',
+                'data' => 'required',
+                'remarks' => 'nullable',
+            ]));
 
-        ]));
-        return redirect(route('records-details.index', ["id" => $request->procurement_record_id]))->with('success', 'Procurement Details Successfully Created');
+            ProcurementRecord::find($request->procurement_record_id)->update([
+                "status" => $request->data,
+                "remarks" => $request->remarks,
+            ]);
+
+            if ($request->link) {
+                ProcurementRecordLink::create([
+                    "procurement_record_id" => $request->procurement_record_id,
+                    "url" => $request->link
+                ]);
+            }
+
+            ProcurementSystemLog::create([
+                "procurement_id" => $request->procurement_record_id,
+                "type" => "Create",
+                "key" => "create_procurement_details",
+                "message" => "User add update to the procurement details ID #" . $record->id,
+                "data" => json_encode($record)
+            ]);
+
+            DB::commit();
+            return redirect(route('records-details.index', ["id" => $request->procurement_record_id]))->with('success', 'Procurement Details Successfully Created');
+        } catch (\Exception $e) {
+            DB::rollback();
+            return $e->getMessage();
+        }
     }
 
     /**
@@ -95,7 +125,7 @@ class ProcurementDetailsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        ProcurementDetails::find($id)->update(
+        $record = ProcurementDetails::find($id)->update(
             $request->validate([
                 'procurement_record_id' => 'required',
                 'category_id' => 'required',
@@ -105,6 +135,19 @@ class ProcurementDetailsController extends Controller
                 'remarks' => 'nullable',
             ])
         );
+
+        ProcurementRecord::find($request->procurement_record_id)->update([
+            "status" => $request->data,
+            "remarks" => $request->remarks,
+        ]);
+
+        ProcurementSystemLog::create([
+            "procurement_id" => $request->procurement_record_id,
+            "type" => "Update",
+            "key" => "update_procurement_details",
+            "message" => "User update existing record of procurement details ID #" . $id,
+            "data" => json_encode($record->all())
+        ]);
         return redirect(route('records-details.index', ["id" => $request->procurement_record_id]))->with('success', 'Procurement Details Successfully Updated');
     }
 
