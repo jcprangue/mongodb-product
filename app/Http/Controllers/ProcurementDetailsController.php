@@ -8,6 +8,7 @@ use App\Models\ProcurementDetails;
 use App\Models\ProcurementRecord;
 use App\Models\ProcurementRecordLink;
 use App\Models\ProcurementSystemLog;
+use App\Models\UserLogProcurement;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use DB;
@@ -108,6 +109,14 @@ class ProcurementDetailsController extends Controller
                 "data" => json_encode($record)
             ]);
 
+            UserLogProcurement::create([
+                'procurement_record_id' => $request->procurement_record_id,
+                'user_id' => auth()->user()->id,
+                'action' => "User add details to the procurement ID #" . $record->id
+            ]);
+
+
+
             DB::commit();
             return redirect(route('records-details.index', ["id" => $request->procurement_record_id]))->with('success', 'Procurement Details Successfully Created');
         } catch (\Exception $e) {
@@ -146,8 +155,15 @@ class ProcurementDetailsController extends Controller
             "type" => "Update",
             "key" => "update_procurement_details",
             "message" => "User update existing record of procurement details ID #" . $id,
-            "data" => json_encode($record->all())
+            "data" => json_encode($record)
         ]);
+
+        UserLogProcurement::create([
+            'procurement_record_id' => $request->procurement_record_id,
+            'user_id' => auth()->user()->id,
+            'action' => "User update existing record of procurement details ID #" . $id
+        ]);
+
         return redirect(route('records-details.index', ["id" => $request->procurement_record_id]))->with('success', 'Procurement Details Successfully Updated');
     }
 
@@ -162,6 +178,13 @@ class ProcurementDetailsController extends Controller
         $data = ProcurementDetails::find($id);
         $procurement_id = $data->procurement_record_id;
         $data->delete();
+
+        UserLogProcurement::create([
+            'procurement_record_id' => $data->procurement_record_id,
+            'user_id' => auth()->user()->id,
+            'action' => "User delete record of procurement details ID #" . $id
+        ]);
+
         return redirect(route('records-details.index', ["id" => $procurement_id]))->with('success', 'Procurement Details Successfully Deleted');
     }
 
