@@ -70,6 +70,14 @@ class ProcurementRecord extends Model
         return $this->hasOne('App\Models\Office', "id", "office_id");
     }
 
+    
+    public function getAmountAttribute($value){
+        
+        
+        return number_format($value,2);
+
+    }
+
 
     public function scopeFilter($query, $request)
     {

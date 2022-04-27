@@ -8998,6 +8998,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 
@@ -9332,8 +9333,16 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     this.showBrgy(this.form.lgu_id);
+    this.displayValue(this.form.amount);
   },
   methods: {
+    displayValue: function displayValue(value) {
+      var displayValue = value || ""; //check if this.value is null
+
+      displayValue = String(displayValue).replace(/,/g, ""); //replace ,
+
+      this.form.amount = displayValue;
+    },
     showBrgy: function showBrgy(val) {
       var self = this;
       this.LGUs.forEach(function (e) {
@@ -100030,7 +100039,11 @@ var render = function () {
                     _vm._v(" "),
                     _c("text-input", {
                       staticClass: "w-full pb-8 pr-6 lg:w-1/2",
-                      attrs: { error: _vm.errors.amount, label: "Amount" },
+                      attrs: {
+                        type: "number",
+                        error: _vm.errors.amount,
+                        label: "Amount",
+                      },
                       model: {
                         value: _vm.form.amount,
                         callback: function ($$v) {

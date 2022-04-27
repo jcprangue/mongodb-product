@@ -223,8 +223,15 @@ export default {
   },
   mounted() {
     this.showBrgy(this.form.lgu_id);
+    this.displayValue(this.form.amount)
   },
   methods: {
+    displayValue(value){
+      var displayValue = value || ""; //check if this.value is null
+      displayValue = String(displayValue).replace(/,/g, ""); //replace ,
+      this.form.amount = displayValue
+
+    },
     showBrgy(val) {
       const self = this;
       this.LGUs.forEach((e) => {

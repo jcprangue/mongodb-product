@@ -127,9 +127,10 @@ class ProcurementRecordController extends Controller
     public function edit($id)
     {
         abort_if(Gate::denies('procurement-update'), Response("You don't have the permission to perform this action"), '403 Forbidden');
-
+        $procurement = ProcurementRecord::find($id);
+        $procurement->amount = (float) str_replace(',', '', $procurement->amount);
         return Inertia::render('Records/Edit', [
-            "record" => ProcurementRecord::find($id),
+            "record" => $procurement,
             "categories" => Category::all(),
             "LGUs" => Municipality::with('barangay')->get(),
             "offices" => Office::all()

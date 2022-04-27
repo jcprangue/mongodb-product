@@ -52,6 +52,7 @@
             />
 
             <text-input
+              type="number"
               v-model="form.amount"
               :error="errors.amount"
               class="w-full pb-8 pr-6 lg:w-1/2"
