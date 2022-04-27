@@ -4,6 +4,8 @@ require('./bootstrap');
 import Vue from 'vue';
 import { App as InertiaApp, plugin as InertiaPlugin } from '@inertiajs/inertia-vue';
 import PortalVue from 'portal-vue';
+import Permissions from './mixins/Permissions';
+Vue.mixin(Permissions);
 
 Vue.mixin({ methods: { route } });
 Vue.use(InertiaPlugin);

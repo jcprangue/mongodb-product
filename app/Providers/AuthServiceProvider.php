@@ -25,6 +25,10 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+         
+        Gate::before(function ($user,$permission){
+            $ability = $user->roles->map->permissions->flatten()->pluck('slug')->unique();
+            return $ability->contains($permission);
+        });
     }
 }

@@ -10,6 +10,7 @@ use App\Http\Controllers\DocumentsController;
 use App\Http\Controllers\DocumentFieldController;
 use App\Http\Controllers\CategoryDocumentController;
 use App\Http\Controllers\ProcurementRecordLinkController;
+use App\Http\Controllers\UserHistoryController;
 use App\Http\Controllers\SearchController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -47,6 +48,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::resource('/document-type/field', DocumentFieldController::class);
     Route::resource('/category-document', CategoryDocumentController::class);
     Route::resource('/records-link', ProcurementRecordLinkController::class);
+    Route::resource('/user-history', UserHistoryController::class);
     Route::resource('/brgy', BarangayController::class)->except([
         'create'
     ]);;

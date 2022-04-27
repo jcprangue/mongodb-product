@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
-use App\Models\Office;
-use App\Models\ProcurementRecords;
+use App\Models\UserLogProcurement;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Gate;
 
-class RecordsController extends Controller
+class UserHistoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,13 +16,16 @@ class RecordsController extends Controller
      */
     public function index(Request $request)
     {
+        abort_if(Gate::denies('view-user-history'), Response("You don't have the permission to perform this action"), '403 Forbidden');
 
-        $procurement_records = ProcurementRecords::orderBy('created_at', 'DESC')->paginate(10)->withQueryString();
-        $data = [
-            "categories" => Category::all(),
-            "records" => ProcurementRecords::all(),
-        ];
-        return Inertia::render('Records', $data);
+        try {
+            $userLogs = UserLogProcurement::with(['users','procurement'])->where("procurement_record_id", $request["id"])->get();
+            return Inertia::render("UserLogDetails", [
+                "record" => $userLogs,
+            ]);
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
     }
 
     /**

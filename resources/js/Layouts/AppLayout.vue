@@ -16,41 +16,16 @@
               </div>
 
               <!-- Navigation Links -->
-              <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+              <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex" v-for="item in headerLinks">
                 <jet-nav-link
-                  :href="route('dashboard.index')"
+                  :href="item.path"
                   :active="$page.props.currentRouteName == 'dashboard'"
+                  v-if="$can(item.gate)"
                 >
-                  Dashboard
+                  {{item.title}}
                 </jet-nav-link>
 
-                <jet-nav-link
-                  :href="route('records.index')"
-                  :active="$page.props.currentRouteName == 'records.index'"
-                >
-                  Procurement Records
-                </jet-nav-link>
-
-                <jet-nav-link
-                  :href="route('category.index')"
-                  :active="$page.props.currentRouteName == 'category.index'"
-                >
-                  Category
-                </jet-nav-link>
-
-                <jet-nav-link
-                  :href="route('LGUs.index')"
-                  :active="$page.props.currentRouteName == 'LGUs.index'"
-                >
-                  LGUs
-                </jet-nav-link>
-
-                <jet-nav-link
-                  :href="route('documents.index')"
-                  :active="$page.props.currentRouteName == 'documents.index'"
-                >
-                  Documents
-                </jet-nav-link>
+             
               </div>
             </div>
 
@@ -476,6 +451,34 @@ export default {
   data() {
     return {
       showingNavigationDropdown: false,
+      headerLinks: [
+        {
+          title: 'Dashboard',
+          path: route('dashboard.index'),
+          gate: 'view-dashboard'
+        },
+        {
+          title: 'Procurement Records',
+          path: route('records.index'),
+          gate: 'view-procurement'
+        },
+        {
+          title: 'Category',
+          path: route('category.index'),
+          gate: 'view-category'
+        },
+        {
+          title: 'LGUs',
+          path: route('LGUs.index'),
+          gate: 'view-lgu'
+        },
+        {
+          title: 'Documents',
+          path: route('documents.index'),
+          gate: 'view-documents'
+        }
+
+      ],
     };
   },
   // mounted() {

@@ -11,8 +11,10 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Excel;
 use PDF;
+use Illuminate\Support\Facades\Gate;
 use App\Exports\ProcurementRecordExport;
 use App\Models\ProcurementSystemLog;
+use App\Models\UserLogProcurement;
 
 class ProcurementRecordController extends Controller
 {
@@ -23,7 +25,12 @@ class ProcurementRecordController extends Controller
      */
     public function index(Request $request)
     {
+            
+        abort_if(Gate::denies('view-procurement'), Response("You don't have the permission to perform this action"), '403 Forbidden');
+        
         try {
+
+        
             $user = auth()->user();
             $tags = json_decode($user->tag);
             $procurement_records = ProcurementRecord::filter($request)->paginate(10)->withQueryString();
@@ -47,6 +54,8 @@ class ProcurementRecordController extends Controller
      */
     public function create()
     {
+        abort_if(Gate::denies('procurement-create'), Response("You don't have the permission to perform this action"), '403 Forbidden');
+
         return Inertia::render('Records/Create', [
             "categories" => Category::all(),
             "offices" => Office::all(),
@@ -62,6 +71,8 @@ class ProcurementRecordController extends Controller
      */
     public function store(Request $request)
     {
+        abort_if(Gate::denies('procurement-create'), Response("You don't have the permission to perform this action"), '403 Forbidden');
+
         $request['created_user_by_id'] = auth()->user()->id;
         $record = ProcurementRecord::create($request->validate([
             'bid_opening_date' => 'required',
@@ -87,6 +98,12 @@ class ProcurementRecordController extends Controller
             "data" => json_encode($record)
         ]);
 
+        UserLogProcurement::create([
+            'procurement_record_id' => $record->id,
+            'user_id' => auth()->user()->id,
+            'action' => 'Add new procurement'
+        ]);
+
         return redirect(route('records.index'))->with('success', 'Procurement Records Successfully Created');
     }
 
@@ -109,6 +126,8 @@ class ProcurementRecordController extends Controller
      */
     public function edit($id)
     {
+        abort_if(Gate::denies('procurement-update'), Response("You don't have the permission to perform this action"), '403 Forbidden');
+
         return Inertia::render('Records/Edit', [
             "record" => ProcurementRecord::find($id),
             "categories" => Category::all(),
@@ -126,6 +145,8 @@ class ProcurementRecordController extends Controller
      */
     public function update(Request $request, $id)
     {
+        abort_if(Gate::denies('procurement-update'), Response("You don't have the permission to perform this action"), '403 Forbidden');
+
         $request['updated_user_by_id'] = auth()->user()->id;
         $record = ProcurementRecord::find($id)->update(
             $request->validate([
@@ -152,6 +173,12 @@ class ProcurementRecordController extends Controller
             "data" => json_encode($request->all())
         ]);
 
+        UserLogProcurement::create([
+            'procurement_record_id' => $record->id,
+            'user_id' => auth()->user()->id,
+            'action' => 'Update procurement'
+        ]);
+
         return redirect(route('records.index'))->with('success', 'Procurement record Successfully Updated');
     }
 
@@ -163,6 +190,8 @@ class ProcurementRecordController extends Controller
      */
     public function destroy($id)
     {
+        abort_if(Gate::denies('procurement-delete'), Response("You don't have the permission to perform this action"), '403 Forbidden');
+
         ProcurementRecord::find($id)->delete();
 
         ProcurementSystemLog::create([
@@ -172,6 +201,13 @@ class ProcurementRecordController extends Controller
             "message" => "User delete the procurement id " . $id,
             "data" => null
         ]);
+
+        UserLogProcurement::create([
+            'procurement_record_id' => $record->id,
+            'user_id' => auth()->user()->id,
+            'action' => 'Delete procurement'
+        ]);
+
 
         return redirect(route('records.index'))->with('success', 'Record Successfully Deleted');
     }

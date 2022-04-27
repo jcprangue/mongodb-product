@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Gate;
 
 class CategoryController extends Controller
 {
@@ -15,6 +16,8 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
+        abort_if(Gate::denies('view-category'), Response("You don't have the permission to perform this action"), '403 Forbidden');
+
         $search = $request['search'];
         $category = Category::when($request["search"] ?? null, function ($query, $search) {
             $query->where('name', 'like', "%$search%")
@@ -46,6 +49,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
+
         return Inertia::render('Category/Create', ['categories' => Category::all()]);
     }
 
@@ -57,6 +61,8 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
+        abort_if(Gate::denies('category-create'), Response("You don't have the permission to perform this action"), '403 Forbidden');
+
         Category::create($request->validate([
             'name' => 'required',
             'abbr' => 'required',
@@ -83,6 +89,8 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
+        abort_if(Gate::denies('category-update'), Response("You don't have the permission to perform this action"), '403 Forbidden');
+
         return Inertia::render('Category/Edit', [
             'category' => $category,
             'categories' => Category::whereNotIn('id', [$category->id])->get()
@@ -98,6 +106,8 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
+        abort_if(Gate::denies('category-update'), Response("You don't have the permission to perform this action"), '403 Forbidden');
+
         $category->update(
             $request->validate([
                 'name' => 'required',
@@ -116,6 +126,8 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
+        abort_if(Gate::denies('category-delete'), Response("You don't have the permission to perform this action"), '403 Forbidden');
+
         $category->delete();
         return redirect(route('category.index'))->with('success', 'Category Successfully Deleted');
     }

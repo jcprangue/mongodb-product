@@ -199,13 +199,24 @@
                 />
               </inertia-link>
             </div>
-            <div class="grid">
+            <div class="grid mr-4">
               <inertia-link
                 class="focus:text-indigo-500"
                 :href="route('records-details.index', { id: row.id })"
                 tabindex="-1"
               >
                 <icon name="list-clock" class="w-6 h-6 m-auto fill-gray-400" />
+              </inertia-link>
+            </div>
+
+            <div class="grid">
+              <inertia-link
+                v-if="$can('view-user-history')"
+                class="focus:text-indigo-500"
+                :href="route('user-history.index', { id: row.id })"
+                tabindex="-1"
+              >
+                <icon name="list-burger" class="w-6 h-6 m-auto fill-gray-400" />
               </inertia-link>
             </div>
           </div>

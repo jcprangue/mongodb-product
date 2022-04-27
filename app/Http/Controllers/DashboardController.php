@@ -33,7 +33,8 @@ class DashboardController extends Controller
             "date" => [
                 "from" => $from,
                 "to" => $to
-            ]
+            ],
+            "auth" => auth()->user()->roles->pluck('name')
         ];
         return Inertia::render('Dashboard', $data);
     }

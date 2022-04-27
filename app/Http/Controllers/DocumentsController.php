@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Documents;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Gate;
 
 class DocumentsController extends Controller
 {
@@ -15,6 +16,8 @@ class DocumentsController extends Controller
      */
     public function index(Request $request)
     {
+        abort_if(Gate::denies('view-documents'), Response("You don't have the permission to perform this action"), '403 Forbidden');
+
         $search = $request['search'];
         $documents = Documents::when($request["search"] ?? null, function ($query, $search) {
             $query->where('name', 'like', "%$search%")
@@ -35,6 +38,9 @@ class DocumentsController extends Controller
      */
     public function create()
     {
+
+        abort_if(Gate::denies('document-create'), Response("You don't have the permission to perform this action"), '403 Forbidden');
+
         return Inertia::render('Document/Create');
     }
 
@@ -46,6 +52,8 @@ class DocumentsController extends Controller
      */
     public function store(Request $request)
     {
+        abort_if(Gate::denies('document-create'), Response("You don't have the permission to perform this action"), '403 Forbidden');
+
         Documents::create($request->validate([
             'name' => 'required',
             'abbr' => 'required',
@@ -72,6 +80,8 @@ class DocumentsController extends Controller
      */
     public function edit(Documents $documents, $id)
     {
+        abort_if(Gate::denies('document-update'), Response("You don't have the permission to perform this action"), '403 Forbidden');
+
         return Inertia::render('Document/Edit', [
             'document' => Documents::find($id),
         ]);
@@ -86,6 +96,8 @@ class DocumentsController extends Controller
      */
     public function update(Request $request, $id)
     {
+        abort_if(Gate::denies('document-update'), Response("You don't have the permission to perform this action"), '403 Forbidden');
+
         Documents::find($id)->update(
             $request->validate([
                 'name' => 'required',
@@ -103,6 +115,8 @@ class DocumentsController extends Controller
      */
     public function destroy($id)
     {
+        abort_if(Gate::denies('document-delete'), Response("You don't have the permission to perform this action"), '403 Forbidden');
+
         $data = Documents::find($id)->delete();
         return redirect(route('documents.index'))->with('success', 'Document Successfully Deleted');
     }

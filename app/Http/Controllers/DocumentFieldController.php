@@ -6,6 +6,7 @@ use App\Models\DocumentField;
 use App\Models\Documents;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Gate;
 
 class DocumentFieldController extends Controller
 {
@@ -16,6 +17,8 @@ class DocumentFieldController extends Controller
      */
     public function index(Request $request)
     {
+        abort_if(Gate::denies('view-document-field'), Response("You don't have the permission to perform this action"), '403 Forbidden');
+
         $document = Documents::find($request["id"]);
         $documentFields = DocumentField::where("document_id", $request["id"])->orderBy('precedence')->get();
 
@@ -36,6 +39,8 @@ class DocumentFieldController extends Controller
      */
     public function store(Request $request)
     {
+        abort_if(Gate::denies('document-field-create'), Response("You don't have the permission to perform this action"), '403 Forbidden');
+
         if (empty($request->id)) {
             DocumentField::create($request->validate([
                 'field_name' => 'required',
@@ -64,6 +69,8 @@ class DocumentFieldController extends Controller
      */
     public function destroy($id)
     {
+        abort_if(Gate::denies('document-field-delete'), Response("You don't have the permission to perform this action"), '403 Forbidden');
+
         $data = DocumentField::find($id);
         $documentId = $data->document_id;
         $data->delete();
