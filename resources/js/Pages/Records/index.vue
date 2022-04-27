@@ -129,9 +129,8 @@
 
     <table class="w-full my-4 whitespace-no-wrap bg-white text-sm">
       <tr class="font-bold text-left">
-        <th class="p-4 text-center">#</th>
-        <th class="p-4 text-center" width="150">Bid Date</th>
-        <th class="p-4 text-center" width="150">IB Number</th>
+        <th class="p-4 text-center" width="150" style="cursor: pointer" @click="sort('bid_opening_date')">Bid Date</th>
+        <th class="p-4 text-center" width="150" style="cursor: pointer" @click="sort('ib_number')">IB Number</th>
         <th class="p-4 text-center" width="350">Project Name</th>
         <th class="p-4 text-center" width="250">Contractor</th>
         <th class="p-4 text-center">Amount</th>
@@ -145,9 +144,6 @@
         :key="row.id"
         class="border-t hover:bg-gray-100 focus-within:bg-gray-100"
       >
-        <td class="p-3">
-          {{ +i + 1 }}
-        </td>
         <td class="p-3">
           {{ row.bid_opening_date }}
         </td>
@@ -277,11 +273,16 @@ export default {
         barangay_id: this.filters.barangay_id,
         month_from: this.filters.month_from,
         month_to: this.filters.month_to,
+        currentSort:'bid_opening_date',
+        currentSortDir:'asc'
       },
       barangays: [],
+     
     };
   },
   watch: {
+  
+
     "filterForm.lgu_id": function (val) {
       this.showBrgy(val);
     },
@@ -297,6 +298,14 @@ export default {
     this.showBrgy(this.filterForm.lgu_id);
   },
   methods: {
+    sort:function(s) {
+      //if s == current sort, reverse
+      if(s === this.filterForm.currentSort) {
+        this.filterForm.currentSortDir = this.filterForm.currentSortDir==='asc'?'desc':'asc';
+      }
+      this.filterForm.currentSort = s;
+      this.submit();
+    },
     showBrgy(val) {
       const self = this;
       this.LGUs.forEach((e) => {

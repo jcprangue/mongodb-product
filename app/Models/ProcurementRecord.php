@@ -97,6 +97,9 @@ class ProcurementRecord extends Model
                 $query->whereDate('created_at', '>=', date('Y-m-01', strtotime($request->month_from)))
                     ->whereDate('created_at', '<=', date('Y-m-t', strtotime($request->month_to)));
             }
-        })->orderBy('created_at', 'DESC');
+        })->when($request['currentSort'] ?? null, function ($query) use ($request) {
+            $query->orderBy($request['currentSort'], $request['currentSortDir']);
+        });
+        
     }
 }

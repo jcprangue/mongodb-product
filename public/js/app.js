@@ -9605,10 +9605,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 // import LineChart from "./LineChart";
 
 
@@ -9656,7 +9652,9 @@ __webpack_require__.r(__webpack_exports__);
         office_id: this.filters.office_id,
         barangay_id: this.filters.barangay_id,
         month_from: this.filters.month_from,
-        month_to: this.filters.month_to
+        month_to: this.filters.month_to,
+        currentSort: 'bid_opening_date',
+        currentSortDir: 'asc'
       },
       barangays: []
     };
@@ -9676,6 +9674,15 @@ __webpack_require__.r(__webpack_exports__);
     this.showBrgy(this.filterForm.lgu_id);
   },
   methods: {
+    sort: function sort(s) {
+      //if s == current sort, reverse
+      if (s === this.filterForm.currentSort) {
+        this.filterForm.currentSortDir = this.filterForm.currentSortDir === 'asc' ? 'desc' : 'asc';
+      }
+
+      this.filterForm.currentSort = s;
+      this.submit();
+    },
     showBrgy: function showBrgy(val) {
       var self = this;
       this.LGUs.forEach(function (e) {
@@ -93794,13 +93801,13 @@ var render = function () {
           _c(
             "div",
             [
-              _c("jet-label", { attrs: { for: "email", value: "Email" } }),
+              _c("jet-label", { attrs: { for: "email", value: "Username" } }),
               _vm._v(" "),
               _c("jet-input", {
                 staticClass: "mt-1 block w-full",
                 attrs: {
                   id: "email",
-                  type: "email",
+                  type: "text",
                   required: "",
                   autofocus: "",
                 },
@@ -100982,7 +100989,61 @@ var render = function () {
         "table",
         { staticClass: "w-full my-4 whitespace-no-wrap bg-white text-sm" },
         [
-          _vm._m(0),
+          _c("tr", { staticClass: "font-bold text-left" }, [
+            _c(
+              "th",
+              {
+                staticClass: "p-4 text-center",
+                staticStyle: { cursor: "pointer" },
+                attrs: { width: "150" },
+                on: {
+                  click: function ($event) {
+                    return _vm.sort("bid_opening_date")
+                  },
+                },
+              },
+              [_vm._v("Bid Date")]
+            ),
+            _vm._v(" "),
+            _c(
+              "th",
+              {
+                staticClass: "p-4 text-center",
+                staticStyle: { cursor: "pointer" },
+                attrs: { width: "150" },
+                on: {
+                  click: function ($event) {
+                    return _vm.sort("ib_number")
+                  },
+                },
+              },
+              [_vm._v("IB Number")]
+            ),
+            _vm._v(" "),
+            _c(
+              "th",
+              { staticClass: "p-4 text-center", attrs: { width: "350" } },
+              [_vm._v("Project Name")]
+            ),
+            _vm._v(" "),
+            _c(
+              "th",
+              { staticClass: "p-4 text-center", attrs: { width: "250" } },
+              [_vm._v("Contractor")]
+            ),
+            _vm._v(" "),
+            _c("th", { staticClass: "p-4 text-center" }, [_vm._v("Amount")]),
+            _vm._v(" "),
+            _c(
+              "th",
+              { staticClass: "p-4 text-center", attrs: { width: "150" } },
+              [_vm._v("Status")]
+            ),
+            _vm._v(" "),
+            _c("th", { staticClass: "p-4 text-center" }, [_vm._v("Remarks")]),
+            _vm._v(" "),
+            _c("th", { staticClass: "p-4 text-center" }, [_vm._v("Action")]),
+          ]),
           _vm._v(" "),
           _vm._l(_vm.records.data, function (row, i) {
             return _c(
@@ -100993,10 +101054,6 @@ var render = function () {
                   "border-t hover:bg-gray-100 focus-within:bg-gray-100",
               },
               [
-                _c("td", { staticClass: "p-3" }, [
-                  _vm._v("\n        " + _vm._s(+i + 1) + "\n      "),
-                ]),
-                _vm._v(" "),
                 _c("td", { staticClass: "p-3" }, [
                   _vm._v(
                     "\n        " + _vm._s(row.bid_opening_date) + "\n      "
@@ -101185,42 +101242,7 @@ var render = function () {
     1
   )
 }
-var staticRenderFns = [
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("tr", { staticClass: "font-bold text-left" }, [
-      _c("th", { staticClass: "p-4 text-center" }, [_vm._v("#")]),
-      _vm._v(" "),
-      _c("th", { staticClass: "p-4 text-center", attrs: { width: "150" } }, [
-        _vm._v("Bid Date"),
-      ]),
-      _vm._v(" "),
-      _c("th", { staticClass: "p-4 text-center", attrs: { width: "150" } }, [
-        _vm._v("IB Number"),
-      ]),
-      _vm._v(" "),
-      _c("th", { staticClass: "p-4 text-center", attrs: { width: "350" } }, [
-        _vm._v("Project Name"),
-      ]),
-      _vm._v(" "),
-      _c("th", { staticClass: "p-4 text-center", attrs: { width: "250" } }, [
-        _vm._v("Contractor"),
-      ]),
-      _vm._v(" "),
-      _c("th", { staticClass: "p-4 text-center" }, [_vm._v("Amount")]),
-      _vm._v(" "),
-      _c("th", { staticClass: "p-4 text-center", attrs: { width: "150" } }, [
-        _vm._v("Status"),
-      ]),
-      _vm._v(" "),
-      _c("th", { staticClass: "p-4 text-center" }, [_vm._v("Remarks")]),
-      _vm._v(" "),
-      _c("th", { staticClass: "p-4 text-center" }, [_vm._v("Action")]),
-    ])
-  },
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
