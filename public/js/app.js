@@ -8999,6 +8999,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 
@@ -9270,6 +9272,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 
@@ -9357,6 +9361,8 @@ __webpack_require__.r(__webpack_exports__);
       this.sending = true;
       this.$inertia.patch(this.route("records.update", this.record.id), this.form).then(function () {
         return _this.sending = false;
+      })["catch"](function (e) {
+        return console.log(e);
       });
     },
     destroy: function destroy() {
@@ -10514,6 +10520,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     record: {
+      type: [Array, Object],
+      "default": function _default() {}
+    },
+    title: {
       type: [Array, Object],
       "default": function _default() {}
     }
@@ -100158,7 +100168,7 @@ var render = function () {
                       },
                       [
                         _c("option", { domProps: { value: null } }, [
-                          _vm._v("All"),
+                          _vm._v("--Select LGU--"),
                         ]),
                         _vm._v(" "),
                         _vm._l(_vm.LGUs, function (lgu, i) {
@@ -100196,7 +100206,7 @@ var render = function () {
                       },
                       [
                         _c("option", { domProps: { value: null } }, [
-                          _vm._v("All"),
+                          _vm._v("--Select Barangay--"),
                         ]),
                         _vm._v(" "),
                         _vm._l(_vm.barangays, function (barangay, i) {
@@ -100562,7 +100572,7 @@ var render = function () {
                       },
                       [
                         _c("option", { domProps: { value: null } }, [
-                          _vm._v("All"),
+                          _vm._v("--Select LGU--"),
                         ]),
                         _vm._v(" "),
                         _vm._l(_vm.LGUs, function (lgu, i) {
@@ -100600,7 +100610,7 @@ var render = function () {
                       },
                       [
                         _c("option", { domProps: { value: null } }, [
-                          _vm._v("All"),
+                          _vm._v("--Select Barangay--"),
                         ]),
                         _vm._v(" "),
                         _vm._l(_vm.barangays, function (barangay, i) {
@@ -102086,7 +102096,15 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [_c("tableData", { attrs: { record: _vm.record } })], 1)
+  return _c(
+    "div",
+    [
+      _vm.record.length > 0
+        ? _c("tableData", { attrs: { record: _vm.record } })
+        : _vm._e(),
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -102220,9 +102238,7 @@ var render = function () {
                   _vm._v(" "),
                   _c("span", { staticClass: "font-medium" }, [_vm._v("/")]),
                   _vm._v(
-                    "\n      " +
-                      _vm._s(_vm.record[0].procurement.project_name) +
-                      " \n    "
+                    "\n      " + _vm._s(_vm.title.project_name) + " \n    "
                   ),
                 ],
                 1

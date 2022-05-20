@@ -1,6 +1,6 @@
 <template>
   <div>
-      <tableData :record="record"></tableData>
+      <tableData v-if="record.length > 0" :record="record"></tableData>
   </div>
 </template>
 

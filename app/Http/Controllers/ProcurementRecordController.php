@@ -25,12 +25,12 @@ class ProcurementRecordController extends Controller
      */
     public function index(Request $request)
     {
-            
+
         abort_if(Gate::denies('view-procurement'), Response("You don't have the permission to perform this action"), '403 Forbidden');
-        
+
         try {
 
-        
+
             $user = auth()->user();
             $tags = json_decode($user->tag);
             $procurement_records = ProcurementRecord::filter($request)->paginate(10)->withQueryString();
@@ -147,7 +147,6 @@ class ProcurementRecordController extends Controller
     public function update(Request $request, $id)
     {
         abort_if(Gate::denies('procurement-update'), Response("You don't have the permission to perform this action"), '403 Forbidden');
-
         $request['updated_user_by_id'] = auth()->user()->id;
         $record = ProcurementRecord::find($id)->update(
             $request->validate([
@@ -156,9 +155,9 @@ class ProcurementRecordController extends Controller
                 'project_name' => 'required',
                 'contractor' => 'required',
                 'category_id' => 'required',
-                'lgu_id' => 'required',
-                'office_id' => 'required',
-                'barangay_id' => 'required',
+                'lgu_id' => 'nullable',
+                'office_id' => 'nullable',
+                'barangay_id' => 'nullable',
                 'amount' => 'required',
                 'status' => 'nullable',
                 'remarks' => 'nullable',
@@ -174,8 +173,9 @@ class ProcurementRecordController extends Controller
             "data" => json_encode($request->all())
         ]);
 
+
         UserLogProcurement::create([
-            'procurement_record_id' => $record->id,
+            'procurement_record_id' => $id,
             'user_id' => auth()->user()->id,
             'action' => 'Update procurement'
         ]);

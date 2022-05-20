@@ -100,7 +100,8 @@
               :error="errors.lgu_id"
               label="Municipality"
             >
-              <option :value="null">All</option>
+              <option :value="null">--Select LGU--</option>
+
               <option v-for="(lgu, i) of LGUs" :key="i" :value="lgu.id">
                 {{ lgu.lgus }}
               </option>
@@ -112,7 +113,8 @@
               :error="errors.barangay_id"
               label="Barangay"
             >
-              <option :value="null">All</option>
+              <option :value="null">--Select Barangay--</option>
+
               <option
                 v-for="(barangay, i) of barangays"
                 :key="i"
@@ -244,7 +246,8 @@ export default {
       this.sending = true;
       this.$inertia
         .patch(this.route("records.update", this.record.id), this.form)
-        .then(() => (this.sending = false));
+        .then(() => (this.sending = false))
+        .catch((e) => console.log(e) );
     },
     destroy() {
       if (confirm("Are you sure you want to delete this LGU?")) {

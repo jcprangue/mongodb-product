@@ -18,11 +18,11 @@ class CategoryDocumentController extends Controller
     public function index(Request $request)
     {
         $category = Category::find($request["id"]);
-
         $categoryDocument = CategoryDocument::with(['category', 'document'])
             ->where("category_id", $request["id"])
             ->orderBy('precedence')
             ->get()->map(function ($query) {
+
                 return [
                     "id" => $query->id,
                     "category_id" => $query->category_id,

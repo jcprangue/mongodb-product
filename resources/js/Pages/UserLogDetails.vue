@@ -9,7 +9,7 @@
           Procurement User Logs 
         </inertia-link>
         <span class="font-medium">/</span>
-        {{ record[0].procurement.project_name}} 
+        {{ title.project_name}} 
       </h2>
     </template>
 
@@ -30,6 +30,10 @@ import UserDetails from "@/Pages/UserHistory/index.vue";
 export default {
   props: {
     record: {
+      type: [Array, Object],
+      default: () => {},
+    },
+     title: {
       type: [Array, Object],
       default: () => {},
     },
