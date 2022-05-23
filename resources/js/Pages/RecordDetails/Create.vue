@@ -29,6 +29,7 @@
               :error="errors.field_id"
               class="w-full pr-6"
               label="Field"
+              
             >
               <option value="" selected disabled>-- Select Field --</option>
               <option v-for="(field, i) of fields" :key="i" :value="field.id">
@@ -36,12 +37,24 @@
               </option>
             </select-input>
           </div>
+
           <div class="flex flex-wrap p-8 -mb-8 -mr-6">
             <text-input
+              v-if="selectedField == 'Text Input'"
               v-model="form.data"
               :error="errors.data"
               class="w-full pr-6"
               label="Input Update"
+            />
+
+            <date-input
+              v-else
+              type="date"
+              format="YYYY-MM-DD"
+              v-model="form.data"
+              :error="errors.data"
+              class="w-full pr-6"
+              label="Date Update"
             />
           </div>
 
@@ -90,6 +103,7 @@ import SelectInput from "@/Shared/SelectInput";
 import TextInput from "@/Shared/TextInput";
 import TextareaInput from "@/Shared/TextareaInput";
 import DateInput from "@/Shared/DateInput";
+import axios from "axios";
 
 export default {
   components: {
@@ -120,11 +134,23 @@ export default {
       },
 
       barangays: [],
+      selectedField: '',
     };
+  },
+  watch:{
+    'form.field_id':function(){
+      console.log('asdas');
+      axios
+        .get(`/document-type/field/${this.form.field_id}`)
+        .then((response) => {
+            this.selectedField = response.data.field_type;
+        })
+    }
   },
 
   mounted() {},
   methods: {
+    
     submit() {
       this.sending = true;
       this.$inertia

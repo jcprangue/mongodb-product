@@ -8259,6 +8259,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Shared_TextInput__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/Shared/TextInput */ "./resources/js/Shared/TextInput.vue");
 /* harmony import */ var _Shared_TextareaInput__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/Shared/TextareaInput */ "./resources/js/Shared/TextareaInput.vue");
 /* harmony import */ var _Shared_DateInput__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @/Shared/DateInput */ "./resources/js/Shared/DateInput.vue");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_6__);
 //
 //
 //
@@ -8344,6 +8346,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -8389,17 +8405,28 @@ __webpack_require__.r(__webpack_exports__);
         remarks: "",
         link: ""
       },
-      barangays: []
+      barangays: [],
+      selectedField: ''
     };
+  },
+  watch: {
+    'form.field_id': function formField_id() {
+      var _this = this;
+
+      console.log('asdas');
+      axios__WEBPACK_IMPORTED_MODULE_6___default().get("/document-type/field/".concat(this.form.field_id)).then(function (response) {
+        _this.selectedField = response.data.field_type;
+      });
+    }
   },
   mounted: function mounted() {},
   methods: {
     submit: function submit() {
-      var _this = this;
+      var _this2 = this;
 
       this.sending = true;
       this.$inertia.post(this.route("records-details.store"), this.form).then(function (response) {
-        _this.sending = false;
+        _this2.sending = false;
       });
     }
   }
@@ -99290,17 +99317,37 @@ var render = function () {
                   "div",
                   { staticClass: "flex flex-wrap p-8 -mb-8 -mr-6" },
                   [
-                    _c("text-input", {
-                      staticClass: "w-full pr-6",
-                      attrs: { error: _vm.errors.data, label: "Input Update" },
-                      model: {
-                        value: _vm.form.data,
-                        callback: function ($$v) {
-                          _vm.$set(_vm.form, "data", $$v)
-                        },
-                        expression: "form.data",
-                      },
-                    }),
+                    _vm.selectedField == "Text Input"
+                      ? _c("text-input", {
+                          staticClass: "w-full pr-6",
+                          attrs: {
+                            error: _vm.errors.data,
+                            label: "Input Update",
+                          },
+                          model: {
+                            value: _vm.form.data,
+                            callback: function ($$v) {
+                              _vm.$set(_vm.form, "data", $$v)
+                            },
+                            expression: "form.data",
+                          },
+                        })
+                      : _c("date-input", {
+                          staticClass: "w-full pr-6",
+                          attrs: {
+                            type: "date",
+                            format: "YYYY-MM-DD",
+                            error: _vm.errors.data,
+                            label: "Date Update",
+                          },
+                          model: {
+                            value: _vm.form.data,
+                            callback: function ($$v) {
+                              _vm.$set(_vm.form, "data", $$v)
+                            },
+                            expression: "form.data",
+                          },
+                        }),
                   ],
                   1
                 ),

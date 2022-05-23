@@ -30,6 +30,16 @@ class DocumentFieldController extends Controller
         ]);
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        return DocumentField::find($id);
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -40,7 +50,6 @@ class DocumentFieldController extends Controller
     public function store(Request $request)
     {
         abort_if(Gate::denies('document-field-create'), Response("You don't have the permission to perform this action"), '403 Forbidden');
-
         if (empty($request->id)) {
             DocumentField::create($request->validate([
                 'field_name' => 'required',

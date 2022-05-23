@@ -30,6 +30,7 @@ class ProcurementDetails extends Model
         return $this->hasOne('App\Models\DocumentField', "id", "field_id");
     }
 
+
     /**
      * @return mixed
      */

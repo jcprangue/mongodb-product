@@ -89,10 +89,11 @@ class ProcurementDetailsController extends Controller
                 'remarks' => 'nullable',
             ]));
 
-            ProcurementRecord::find($request->procurement_record_id)->update([
-                "status" => $request->data,
-                "remarks" => $request->remarks,
-            ]);
+            $data = ProcurementRecord::find($request->procurement_record_id);
+            $data->status = $request->data . " (" . $record->field->document->abbr . ")";
+            $data->remarks = $request->remarks;
+            $data->update();
+
 
             if ($request->link) {
                 ProcurementRecordLink::create([
@@ -105,14 +106,14 @@ class ProcurementDetailsController extends Controller
                 "procurement_id" => $request->procurement_record_id,
                 "type" => "Create",
                 "key" => "create_procurement_details",
-                "message" => "User add update to the procurement details ID #" . $record->id,
+                "message" => "User add update to " . $record->field->document->abbr . "(" . $record->field->field_name . ")",
                 "data" => json_encode($record)
             ]);
 
             UserLogProcurement::create([
                 'procurement_record_id' => $request->procurement_record_id,
                 'user_id' => auth()->user()->id,
-                'action' => "User add details to the procurement ID #" . $record->id
+                'action' => "User add update to " . $record->field->document->abbr . "(" . $record->field->field_name . ")"
             ]);
 
 
@@ -144,9 +145,9 @@ class ProcurementDetailsController extends Controller
                 'remarks' => 'nullable',
             ])
         );
-
+        $record = ProcurementDetails::find($id);
         ProcurementRecord::find($request->procurement_record_id)->update([
-            "status" => $request->data,
+            "status" => $request->data . " (" . $record->field->document->abbr . ")",
             "remarks" => $request->remarks,
         ]);
 
@@ -154,14 +155,14 @@ class ProcurementDetailsController extends Controller
             "procurement_id" => $request->procurement_record_id,
             "type" => "Update",
             "key" => "update_procurement_details",
-            "message" => "User update existing record of procurement details ID #" . $id,
+            "message" => "User update " . $record->field->document->abbr . "(" . $record->field->field_name . ")",
             "data" => json_encode($record)
         ]);
 
         UserLogProcurement::create([
             'procurement_record_id' => $request->procurement_record_id,
             'user_id' => auth()->user()->id,
-            'action' => "User update existing record of procurement details ID #" . $id
+            'action' => "User update " . $record->field->document->abbr . "(" . $record->field->field_name . ")",
         ]);
 
         return redirect(route('records-details.index', ["id" => $request->procurement_record_id]))->with('success', 'Procurement Details Successfully Updated');

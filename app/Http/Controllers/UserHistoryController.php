@@ -20,7 +20,7 @@ class UserHistoryController extends Controller
         abort_if(Gate::denies('view-user-history'), Response("You don't have the permission to perform this action"), '403 Forbidden');
 
         try {
-            $userLogs = UserLogProcurement::with(['users', 'procurement'])->where("procurement_record_id", $request["id"])->get();
+            $userLogs = UserLogProcurement::with(['users', 'procurement'])->where("procurement_record_id", $request["id"])->orderBy('created_at', 'DESC')->get();
             return Inertia::render("UserLogDetails", [
                 "record" => $userLogs,
                 "title" => ProcurementRecord::find($request["id"])

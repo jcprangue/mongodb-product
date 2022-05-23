@@ -14,4 +14,12 @@ class DocumentField extends Model
      * @var array
      */
     protected $fillable = ['field_name', 'field_type', 'document_id', 'precedence'];
+
+    /**
+     * @return mixed
+     */
+    public function document()
+    {
+        return $this->belongsTo('App\Models\Documents');
+    }
 }
