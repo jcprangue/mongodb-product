@@ -7,6 +7,7 @@ use App\Models\DocumentField;
 use App\Models\ProcurementDetails;
 use App\Models\ProcurementRecord;
 use App\Models\ProcurementRecordLink;
+use App\Models\ProcurementRecordStatusHistory;
 use App\Models\ProcurementSystemLog;
 use App\Models\UserLogProcurement;
 use Illuminate\Http\Request;
@@ -110,6 +111,14 @@ class ProcurementDetailsController extends Controller
                 "data" => json_encode($record)
             ]);
 
+            ProcurementRecordStatusHistory::create([
+                "procurement_record_id" => $request->procurement_record_id,
+                "status" => $request->data,
+                "remarks" => $request->remarks,
+                "user_id" => auth()->user()->id,
+                "action" => "add from " . $record->field->document->abbr . " details"
+            ]);
+
             UserLogProcurement::create([
                 'procurement_record_id' => $request->procurement_record_id,
                 'user_id' => auth()->user()->id,
@@ -158,6 +167,15 @@ class ProcurementDetailsController extends Controller
             "message" => "User update " . $record->field->document->abbr . "(" . $record->field->field_name . ")",
             "data" => json_encode($record)
         ]);
+
+        ProcurementRecordStatusHistory::create([
+            "procurement_record_id" => $request->procurement_record_id,
+            "status" => $request->data,
+            "remarks" => $request->remarks,
+            "user_id" => auth()->user()->id,
+            "action" => "update from " . $record->field->document->abbr . " details"
+        ]);
+
 
         UserLogProcurement::create([
             'procurement_record_id' => $request->procurement_record_id,

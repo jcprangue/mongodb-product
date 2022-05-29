@@ -166,7 +166,15 @@
           {{ row.amount.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") }}
         </td>
         <td class="p-3">
-          {{ row.status }}
+          
+          <inertia-link
+            class="focus:text-indigo-500"
+            :href="route('records-history.edit', row.id)"
+            tabindex="-1"
+          >
+           <span class="text-blue-600 font-bold">{{ row.status }}</span>
+          </inertia-link>
+
         </td>
         <td class="p-3">
           <p v-if="row.remarks">

@@ -13,6 +13,7 @@ use Excel;
 use PDF;
 use Illuminate\Support\Facades\Gate;
 use App\Exports\ProcurementRecordExport;
+use App\Models\ProcurementRecordStatusHistory;
 use App\Models\ProcurementSystemLog;
 use App\Models\UserLogProcurement;
 
@@ -98,6 +99,14 @@ class ProcurementRecordController extends Controller
             "data" => json_encode($record)
         ]);
 
+        ProcurementRecordStatusHistory::create([
+            "procurement_record_id" => $record->id,
+            "status" => $request->status,
+            "remarks" => $request->remarks,
+            "user_id" => auth()->user()->id,
+            "action" => "create"
+        ]);
+
         UserLogProcurement::create([
             'procurement_record_id' => $record->id,
             'user_id' => auth()->user()->id,
@@ -173,6 +182,13 @@ class ProcurementRecordController extends Controller
             "data" => json_encode($request->all())
         ]);
 
+        ProcurementRecordStatusHistory::create([
+            "procurement_record_id" => $id,
+            "status" => $request->status,
+            "remarks" => $request->remarks,
+            "user_id" => auth()->user()->id,
+            "action" => "modify"
+        ]);
 
         UserLogProcurement::create([
             'procurement_record_id' => $id,
