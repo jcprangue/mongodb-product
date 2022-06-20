@@ -84,7 +84,7 @@ class ProcurementRecordController extends Controller
             'office_id' => 'nullable',
             'lgu_id' => 'nullable',
             'barangay_id' => 'nullable',
-            'amount' => 'required',
+            'amount' => 'required|numeric',
             'status' => 'nullable',
             'remarks' => 'nullable',
             'created_user_by_id' => "required"
@@ -167,7 +167,7 @@ class ProcurementRecordController extends Controller
                 'lgu_id' => 'nullable',
                 'office_id' => 'nullable',
                 'barangay_id' => 'nullable',
-                'amount' => 'required',
+                'amount' => 'required|numeric',
                 'status' => 'nullable',
                 'remarks' => 'nullable',
                 'updated_user_by_id' => 'required',
