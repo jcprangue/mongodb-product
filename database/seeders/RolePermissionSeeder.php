@@ -26,6 +26,8 @@ class RolePermissionSeeder extends Seeder
                 "slug" => "guest",
                 "description" => "Guest Access"
             ]
+
+
         ];
 
         $permissions = [
@@ -35,7 +37,7 @@ class RolePermissionSeeder extends Seeder
                 "description" => "Permission to view dashboard"
             ],
             [
-                
+
                 "name" => "View Procurement",
                 "slug" => "view-procurement",
                 "description" => "Permission to view procurement"
@@ -56,7 +58,7 @@ class RolePermissionSeeder extends Seeder
                 "description" => "Permission to delete procurement"
             ],
             [
-                
+
                 "name" => "View Procurement Details",
                 "slug" => "view-procurement-details",
                 "description" => "Permission to view details"
@@ -177,15 +179,15 @@ class RolePermissionSeeder extends Seeder
                 'procurement-details-update',
                 'procurement-details-delete',
             ];
-            
+
             $_role = Role::firstOrCreate($role);
             $permissionsIds = [];
             foreach ($permissions as $key => $permission) {
                 if ($role["slug"] == "admin") {
                     $_permission = Permission::firstOrCreate($permission);
                     $permissionsIds[] = $_permission->id;
-                }else{
-                    if (in_array($permission['slug'],$guestPermission)){
+                } else {
+                    if (in_array($permission['slug'], $guestPermission)) {
                         $_permission = Permission::firstOrCreate($permission);
                         $permissionsIds[] = $_permission->id;
                     }
