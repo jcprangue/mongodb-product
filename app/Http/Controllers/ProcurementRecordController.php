@@ -220,7 +220,7 @@ class ProcurementRecordController extends Controller
         ]);
 
         UserLogProcurement::create([
-            'procurement_record_id' => $record->id,
+            'procurement_record_id' => null,
             'user_id' => auth()->user()->id,
             'action' => 'Delete procurement'
         ]);
