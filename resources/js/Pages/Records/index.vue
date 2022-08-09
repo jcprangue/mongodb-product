@@ -133,6 +133,7 @@
         <th class="p-4 text-center" width="150" style="cursor: pointer" @click="sort('ib_number')">IB Number</th>
         <th class="p-4 text-center" width="350">Project Name</th>
         <th class="p-4 text-center" width="250">Contractor</th>
+        <th class="p-4 text-center">Funding</th>
         <th class="p-4 text-center">Amount</th>
         <th class="p-4 text-center" width="150">Status</th>
         <th class="p-4 text-center">Remarks</th>
@@ -161,6 +162,9 @@
         </td>
         <td class="p-3">
           {{ row.contractor }}
+        </td>
+        <td class="p-3">
+          {{ (row.fund) ? row.fund.name : '' }}
         </td>
         <td class="p-3">
           {{ row.amount.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") }}

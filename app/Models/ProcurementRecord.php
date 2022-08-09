@@ -25,9 +25,12 @@ class ProcurementRecord extends Model
         'amount',
         'status',
         'remarks',
+        'funding_id',
         'created_user_by_id',
         'updated_user_by_id',
     ];
+
+    protected $with = ['fund'];
 
 
     /**
@@ -52,6 +55,14 @@ class ProcurementRecord extends Model
     public function lgu()
     {
         return $this->hasOne('App\Models\Municipality', "id", "lgu_id");
+    }
+
+    /**
+     * @return mixed
+     */
+    public function fund()
+    {
+        return $this->hasOne('App\Models\funding', "id", "funding_id");
     }
 
     /**

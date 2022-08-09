@@ -47,9 +47,28 @@
             <text-input
               v-model="form.contractor"
               :error="errors.contractor"
-              class="w-full pb-8 pr-6 lg:w-1/2"
+              class="w-full pb-8 pr-6 lg:w-full"
               label="Contractor"
             />
+
+           
+          </div>
+
+          <div class="flex flex-wrap p-8 -mb-8 -mr-6">
+            <select-input
+              v-model="form.funding_id"
+              :error="errors.funding_id"
+              class="w-1/2 pb-8 pr-6"
+              label="Funding"
+            >
+              <option
+                v-for="(funding, i) of fundings"
+                :key="i"
+                :value="funding.id"
+              >
+                {{ funding.name }}
+              </option>
+            </select-input>
 
             <text-input
               v-model="form.amount"
@@ -197,6 +216,7 @@ export default {
     LGUs: { type: [Object, Array], default: () => {} },
     record: { type: [Object, Array], default: () => {} },
     offices: { type: [Object, Array], default: () => {} },
+    fundings: { type: [Object, Array], default: () => {} },
   },
   data() {
     return {
@@ -211,6 +231,7 @@ export default {
         amount: this.record.amount,
         lgu_id: this.record.lgu_id,
         barangay_id: this.record.barangay_id,
+        funding_id: this.record.funding_id,
         status: this.record.status,
         remarks: this.record.remarks,
       },

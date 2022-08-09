@@ -13,6 +13,7 @@ use Excel;
 use PDF;
 use Illuminate\Support\Facades\Gate;
 use App\Exports\ProcurementRecordExport;
+use App\Models\funding;
 use App\Models\ProcurementRecordStatusHistory;
 use App\Models\ProcurementSystemLog;
 use App\Models\UserLogProcurement;
@@ -30,8 +31,6 @@ class ProcurementRecordController extends Controller
         abort_if(Gate::denies('view-procurement'), Response("You don't have the permission to perform this action"), '403 Forbidden');
 
         try {
-
-
             $user = auth()->user();
             $tags = json_decode($user->tag);
             $procurement_records = ProcurementRecord::filter($request)->paginate(10)->withQueryString();
@@ -56,11 +55,11 @@ class ProcurementRecordController extends Controller
     public function create()
     {
         abort_if(Gate::denies('procurement-create'), Response("You don't have the permission to perform this action"), '403 Forbidden');
-
         return Inertia::render('Records/Create', [
             "categories" => Category::all(),
             "offices" => Office::all(),
-            "LGUs" => Municipality::with('barangay')->get()
+            "LGUs" => Municipality::with('barangay')->get(),
+            "fundings" => funding::all()
         ]);
     }
 
@@ -87,6 +86,7 @@ class ProcurementRecordController extends Controller
             'amount' => 'required|numeric',
             'status' => 'nullable',
             'remarks' => 'nullable',
+            'funding_id' => 'nullable',
             'created_user_by_id' => "required"
 
         ]));
@@ -142,7 +142,9 @@ class ProcurementRecordController extends Controller
             "record" => $procurement,
             "categories" => Category::all(),
             "LGUs" => Municipality::with('barangay')->get(),
-            "offices" => Office::all()
+            "offices" => Office::all(),
+            "fundings" => funding::all()
+
         ]);
     }
 
@@ -168,6 +170,7 @@ class ProcurementRecordController extends Controller
                 'office_id' => 'nullable',
                 'barangay_id' => 'nullable',
                 'amount' => 'required|numeric',
+                'funding_id' => 'nullable',
                 'status' => 'nullable',
                 'remarks' => 'nullable',
                 'updated_user_by_id' => 'required',
