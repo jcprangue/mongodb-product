@@ -55,8 +55,10 @@ class ProcurementRecordController extends Controller
     public function create()
     {
         abort_if(Gate::denies('procurement-create'), Response("You don't have the permission to perform this action"), '403 Forbidden');
+        $user = Auth()->user();
+        $tags = json_decode($user->tag);
         return Inertia::render('Records/Create', [
-            "categories" => Category::all(),
+            "categories" => Category::whereIn('id',$tags)->get(),
             "offices" => Office::all(),
             "LGUs" => Municipality::with('barangay')->get(),
             "fundings" => funding::all()
@@ -78,7 +80,6 @@ class ProcurementRecordController extends Controller
             'bid_opening_date' => 'required',
             'ib_number' => 'required',
             'project_name' => 'required',
-            'contractor' => 'required',
             'category_id' => 'required',
             'office_id' => 'nullable',
             'lgu_id' => 'nullable',
@@ -138,9 +139,11 @@ class ProcurementRecordController extends Controller
         abort_if(Gate::denies('procurement-update'), Response("You don't have the permission to perform this action"), '403 Forbidden');
         $procurement = ProcurementRecord::find($id);
         $procurement->amount = (float) str_replace(',', '', $procurement->amount);
+        $user = Auth()->user();
+        $tags = json_decode($user->tag);
         return Inertia::render('Records/Edit', [
             "record" => $procurement,
-            "categories" => Category::all(),
+            "categories" => Category::whereIN('id', $tags)->get(),
             "LGUs" => Municipality::with('barangay')->get(),
             "offices" => Office::all(),
             "fundings" => funding::all()

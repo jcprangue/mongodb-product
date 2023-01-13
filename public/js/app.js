@@ -100421,7 +100421,7 @@ var render = function () {
                       staticClass: "w-full pb-8 pr-6 lg:w-full",
                       attrs: {
                         error: _vm.errors.contractor,
-                        label: "Contractor",
+                        label: "Contractor / Supplier",
                       },
                       model: {
                         value: _vm.form.contractor,
@@ -100868,7 +100868,7 @@ var render = function () {
                       staticClass: "w-full pb-8 pr-6 lg:w-full",
                       attrs: {
                         error: _vm.errors.contractor,
-                        label: "Contractor",
+                        label: "Contractor / Supplier",
                       },
                       model: {
                         value: _vm.form.contractor,

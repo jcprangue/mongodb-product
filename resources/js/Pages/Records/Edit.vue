@@ -48,7 +48,7 @@
               v-model="form.contractor"
               :error="errors.contractor"
               class="w-full pb-8 pr-6 lg:w-full"
-              label="Contractor"
+              label="Contractor / Supplier"
             />
 
            

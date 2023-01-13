@@ -95,11 +95,11 @@ class ProcurementRecord extends Model
 
         $user = auth()->user();
         $query->when($request["search"] ?? null, function ($query) use ($request) {
-            $query->where('ib_number', 'like', "%$request->search%")
-                ->orWhere('project_name', 'like', "%$request->search%")
-                ->orWhere('status', 'like', "%$request->search%")
-                ->orWhere('remarks', 'like', "%$request->search%")
-                ->orWhere('contractor', 'like', "%$request->search%");
+            $query->where('ib_number', 'like', "$request->search%")
+                ->orWhere('project_name', 'like', "$request->search%")
+                // ->orWhere('status', 'like', "$request->search%")
+                // ->orWhere('remarks', 'like', "$request->search%")
+                ->orWhere('contractor', 'like', "$request->search%");
         })->when($request['category'] ?? null, function ($query) use ($request) {
             $query->where('category_id', $request->category);
         })->when($request['category'] == null, function ($query) use ($user) {
