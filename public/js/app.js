@@ -9832,7 +9832,8 @@ __webpack_require__.r(__webpack_exports__);
         currentSort: 'bid_opening_date',
         currentSortDir: 'asc'
       },
-      barangays: []
+      barangays: [],
+      debounce: null
     };
   },
   watch: {
@@ -9850,6 +9851,14 @@ __webpack_require__.r(__webpack_exports__);
     this.showBrgy(this.filterForm.lgu_id);
   },
   methods: {
+    debounceSearch: function debounceSearch(event) {
+      var _this = this;
+
+      clearTimeout(this.debounce);
+      this.debounce = setTimeout(function () {
+        _this.filterForm.search = event.target.value;
+      }, 600);
+    },
     sort: function sort(s) {
       //if s == current sort, reverse
       if (s === this.filterForm.currentSort) {
@@ -101290,14 +101299,6 @@ var render = function () {
         { staticClass: "flex justify-between mb-4" },
         [
           _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.filterForm.search,
-                expression: "filterForm.search",
-              },
-            ],
             staticClass:
               "relative w-4/5 px-6 mr-3 py-3 rounded-r focus:shadow-outline",
             attrs: {
@@ -101306,15 +101307,7 @@ var render = function () {
               name: "search",
               placeholder: "Type keyword here",
             },
-            domProps: { value: _vm.filterForm.search },
-            on: {
-              input: function ($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.$set(_vm.filterForm, "search", $event.target.value)
-              },
-            },
+            on: { input: _vm.debounceSearch },
           }),
           _vm._v(" "),
           _c(

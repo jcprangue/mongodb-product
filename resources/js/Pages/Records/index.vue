@@ -17,7 +17,7 @@
         type="text"
         name="search"
         placeholder="Type keyword here"
-        v-model="filterForm.search"
+        @input="debounceSearch"
       />
 
       <inertia-link
@@ -289,7 +289,7 @@ export default {
         currentSortDir:'asc'
       },
       barangays: [],
-     
+      debounce: null
     };
   },
   watch: {
@@ -310,6 +310,12 @@ export default {
     this.showBrgy(this.filterForm.lgu_id);
   },
   methods: {
+    debounceSearch(event) {
+      clearTimeout(this.debounce)
+      this.debounce = setTimeout(() => {
+        this.filterForm.search = event.target.value
+      }, 600)
+    },
     sort:function(s) {
       //if s == current sort, reverse
       if(s === this.filterForm.currentSort) {
