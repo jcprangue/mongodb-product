@@ -74,13 +74,13 @@ class ProcurementRecordController extends Controller
     public function store(Request $request)
     {
         abort_if(Gate::denies('procurement-create'), Response("You don't have the permission to perform this action"), '403 Forbidden');
-
         $request['created_user_by_id'] = auth()->user()->id;
         $record = ProcurementRecord::create($request->validate([
             'bid_opening_date' => 'required',
             'ib_number' => 'required',
             'project_name' => 'required',
             'category_id' => 'required',
+            'contractor' => 'nullable',
             'office_id' => 'nullable',
             'lgu_id' => 'nullable',
             'barangay_id' => 'nullable',
