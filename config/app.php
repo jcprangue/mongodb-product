@@ -177,8 +177,8 @@ return [
         App\Providers\FortifyServiceProvider::class,
         App\Providers\JetstreamServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
-        Barryvdh\DomPDF\ServiceProvider::class
-
+        Barryvdh\DomPDF\ServiceProvider::class,
+        Jenssegers\Mongodb\MongodbServiceProvider::class,
     ],
 
     /*
